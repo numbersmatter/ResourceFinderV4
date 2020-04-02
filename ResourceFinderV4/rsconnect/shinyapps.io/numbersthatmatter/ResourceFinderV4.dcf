@@ -1,0 +1,12 @@
+name: ResourceFinderV4
+title: ResourceFinderV4
+username:
+account: numbersthatmatter
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2006824
+bundleId: 2932056
+url: https://numbersthatmatter.shinyapps.io/ResourceFinderV4/
+when: 1585316798.58724
+asMultiple: FALSE
+asStatic: FALSE
