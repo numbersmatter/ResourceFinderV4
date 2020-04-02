@@ -81,8 +81,8 @@ shinyServer(function(input, output, session) {
         
         leaflet() %>%
             addTiles() %>%
-            addMarkers(data = df, lng = ~lon, lat = ~lat,
-                       popup = str_c(df$Program, "<br>", df$geoAddress, "<br>",
+            addMarkers(data = df, lng = ~Lon, lat = ~Lat,
+                       popup = str_c(df$Program, "<br>", df$GeoAddress, "<br>",
                                      "Hours Open:","<br>","Check Program box below."
                        ) 
             )
@@ -99,10 +99,10 @@ shinyServer(function(input, output, session) {
                 width = 12,
                 title = paste0("A Program of: ", appdata()[i, 'Organization']),
                 h2(appdata()[i, 'Program']),
-                p("Address: ", str_to_title(appdata()[i,'geoAddress']),
+                p("Address: ", str_to_title(appdata()[i,'GeoAddress']),
                   br(), 
                   "Phone: ", appdata()[i,'Phone'], br(),
-                  "website: ", a(href= paste0(appdata()[i,'website']), paste0(appdata()[i,'website']) , target="_blank" )),
+                  "website: ", a(href= paste0(appdata()[i,'Website']), paste0(appdata()[i,'Website']) , target="_blank" )),
                 h3("Description"),
                 p(appdata()[i,'Description']),
                 h3("Notes"),
