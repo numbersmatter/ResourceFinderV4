@@ -1,6 +1,5 @@
 default:
-  dw_token: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwcm9kLXVzZXItY2xpZW50OmxsYXdzb253b3JrIiwiaXNzIjoiYWdlbnQ6bGxhd3Nvbndvcms6OjhhODU4ZGMwLTM4NzktNGEwZS1hMWQwLTNiNzQ3ZjkxZTczOSIsImlhdCI6MTUyMDM3MjQwNSwicm9sZSI6WyJ1c2VyX2FwaV9yZWFkIiwidXNlcl9hcGlfd3JpdGUiXSwiZ2VuZXJhbC1wdXJwb3NlIjp0cnVlLCJzYW1sIjp7fX0.WMV1uhNGN4e26ewsKVThMQBT-fvWz5IDR5lPn8yrDwmw1YZEzwvg3kZLCHC7B2qC8HlSRMxnXj0TbcZXqUPIlw"
-  dataset: "data-sampled.csv"
+  dw_token: """
   
 production:
   trials: 25
