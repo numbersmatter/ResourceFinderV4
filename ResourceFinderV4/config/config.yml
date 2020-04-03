@@ -3,7 +3,7 @@ default:
   dataset: "data-sampled.csv"
   
 production:
-  trials: 30
+  trials: 25
   dataset: "data.csv"
 
 
