@@ -5,8 +5,8 @@ account: numbersthatmatter
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2006824
-bundleId: 2932056
+bundleId: 2982883
 url: https://numbersthatmatter.shinyapps.io/ResourceFinderV4/
-when: 1585316798.58724
+when: 1586290358.80843
 asMultiple: FALSE
 asStatic: FALSE
