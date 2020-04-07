@@ -105,7 +105,7 @@ shinyServer(function(input, output, session) {
                   "website: ", a(href= paste0(appdata()[i,'Website']), paste0(appdata()[i,'Website']) , target="_blank" )),
                 h3("Description"),
                 p(appdata()[i,'Description']),
-                h3("Notes"),
+                h3("Changes to the Program Due to COVID-19"),
                 p(appdata()[i,'Notes']),
                 h4("Hours Open:"),
                 p("Monday: ", appdata()[i,'Mon'], br(), 

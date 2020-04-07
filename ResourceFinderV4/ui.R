@@ -13,7 +13,7 @@ library(shinydashboard)
 
 # Define UI for shiny app
 ui <- dashboardPage(
-    dashboardHeader(title = "COVID-19 Resource Finder"),
+    dashboardHeader(title = "Guilford COVID-19 Resource Finder"),
     
     dashboardSidebar(
         sidebarMenu(
@@ -65,7 +65,7 @@ ui <- dashboardPage(
         #leaflet map of resources
         fluidRow(
             box(
-                title = 'area map',
+                title = 'Map of Resources',
                 width = 12,
                 leafletOutput("map")
             )
