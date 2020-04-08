@@ -26,7 +26,7 @@ ui <- dashboardPage(
       tabItem(tabName = "helpVideo",
               fluidRow(
                 column(width = 3),
-                box(width = NULL,
+                column(width = 6,
                     title = "YT Video Here",
                     HTML('<iframe width="560" height="315" src="https://www.youtube.com/embed/ScMzIvxBSi4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
                 ),
@@ -35,8 +35,10 @@ ui <- dashboardPage(
       ), # Closing helpVideo tabItem
       tabItem(tabName = "resources",
               fluidRow(
-                valueBoxOutput("programTotal"),
-                valueBoxOutput("programValue")
+                column(width = 2),
+                valueBoxOutput(width = 4, "programTotal"),
+                valueBoxOutput(width = 4, "programValue"),
+                column(width = 2)
               ), # closing fluidRow
               fluidRow(
                 box(title = 'Map of Resources',
