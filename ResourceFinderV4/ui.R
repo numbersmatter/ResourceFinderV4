@@ -9,64 +9,36 @@ ui <- dashboardPage(
     dashboardSidebar(
         sidebarMenu(
             menuItem("Help Video", tabName = "helpVideo", icon = icon("play-circle")),
-            menuItem("Resources", tabName = "resources", icon = icon("th-list"))
-        ),
-#Filter inputs
-        
-        selectizeInput(
-            "category",
-            "Select Category:",
-            choices = resources$Category,
-            multiple = TRUE
-        ),
-        #filter City        
-        selectizeInput(
-            "city",
-            "Select Cities:",
-            choices = c("All Cities" = ''),
-            multiple = TRUE
-        ),
-        
-        selectizeInput(
-            "program",
-            "Select Programs:",
-            choices = c("All Programs" = ''),
-            multiple = TRUE
+            menuItem("Resources", tabName = "resources", icon = icon("th-list")),
+            filterDataInputsUI("selections",
+                               categories = unique(resources$Category))
         )
     ),
     
     dashboardBody(
-        fluidRow(
-            column(12, 
-                   box(
-                       width = NULL, 
-                       title = "YT Video Here", 
-                       HTML('<iframe width="560" height="315" src="https://www.youtube.com/embed/ScMzIvxBSi4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
-                   ))
-            ),
-        
-        fluidRow(
-
-
-            valueBoxOutput("programTotal"),
-            valueBoxOutput("programValue")
-            
-        ),
-        
-        #leaflet map of resources
-        fluidRow(
-            box(
-                title = 'Map of Resources',
-                width = 12,
-                leafletOutput("map")
-            )
-        ),
-        
-        
-            uiOutput("programinfo")
-        
-        
-
-            
-        )
-    )
+        tabItems(
+            tabItem(tabName = "helpVideo",
+                    fluidRow(
+                        column(width = 3),
+                        box(width = NULL,
+                            title = "YT Video Here",
+                            HTML('<iframe width="560" height="315" src="https://www.youtube.com/embed/ScMzIvxBSi4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
+                            ),
+                        column(width = 3)
+                        ) # closing fluidRow
+                    ), # Closing helpVideo tabItem
+            tabItem(tabName = "resources",
+                    fluidRow(
+                        valueBoxOutput("programTotal"),
+                        valueBoxOutput("programValue")
+                        ), # closing fluidRow
+                    fluidRow(
+                        box(title = 'Map of Resources',
+                            width = 12,
+                            leafletOutput("map")),
+                        uiOutput("programinfo")
+                        ) # closing fluidRow
+                    ) # Closing resources tabItem
+            ) # Closing tabItems
+        ) # Closing dashboardBody
+    ) # Closing dashboardPage
