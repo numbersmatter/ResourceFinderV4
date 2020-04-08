@@ -1,12 +1,7 @@
 # Load packages for base app
 library(shiny)
 library(reactable)
-library(bootstraplib)
 library(shinycssloaders)
-
-# Bootstrap styling
-bs_theme_new(version = "4+3", bootswatch = "pulse")
-bs_theme_add_variables(`font-family-base` = "Roboto")
 
 # Source necessary files
 source("global.R")
@@ -18,7 +13,6 @@ ui <- navbarPage(title = "Guilford COVID-19 Resource Finder",
                  collapsible = TRUE, windowTitle = "COVID-19 Resources",
                  tabPanel(title = "Home",
                           fluidPage(
-                            bootstrap(),
                             sidebarLayout(
                               sidebarPanel = sidebarPanel(
                                 filterDataInputsUI("selections",
