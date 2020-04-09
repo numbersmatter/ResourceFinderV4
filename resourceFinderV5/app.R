@@ -31,7 +31,7 @@ ui <- dashboardPage(
                     HTML('<iframe width="560" height="315" src="https://www.youtube.com/embed/ScMzIvxBSi4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
                 ),
                 column(width = 3)
-              ) # closing fluidRow
+              ), # closing fluidRow
       ), # Closing helpVideo tabItem
       tabItem(tabName = "resources",
               fluidRow(
@@ -65,7 +65,7 @@ server <- (function(input, output, session) {
       filter(if (is.null(selections$cities())) !(City %in% selections$cities()) else City %in% selections$cities()) %>%
       filter(if (is.null(selections$programs())) !(Program %in% selections$programs()) else Program %in% selections$programs())
   })
-  
+
   # Create an observer for change in data and call module for main Leaflet map
   observe({
     map_dat <- final_df()
@@ -92,6 +92,7 @@ server <- (function(input, output, session) {
   output$programinfo <- renderUI({
     lapply(1:nrow(final_df()), function(i){
       fluidRow(
+        column(width = 12,
         box(
           width = 12,
           title = paste0("A Program of: ", final_df()[i, 'Organization']),
@@ -114,6 +115,7 @@ server <- (function(input, output, session) {
             "Sunday: ", final_df()[i,'Sun'],br(),
           )
         )
+      )
       )
     })
     
