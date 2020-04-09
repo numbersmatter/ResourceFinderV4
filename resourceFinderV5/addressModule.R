@@ -29,7 +29,7 @@ addressInputServer <- function(input, output, session) {
       rawToChar() %>%
       from_json()
     
-    if (is.list(api_call)) {
+    if (class(api_call) == "list") {
       api_call %>%
         map_df(.x = ., .f = as_tibble) %>%
         distinct(place_id,.keep_all = T) %>%
@@ -44,8 +44,6 @@ addressInputServer <- function(input, output, session) {
         st_buffer(2000) %>%
         st_transform(crs = 4326)
     }
-    
-    
   })
   
   return(reactive({ res() }))
