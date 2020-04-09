@@ -8,7 +8,7 @@ leafletMapUI <- function(id) {
   
 }
 
-leafletMapServer <- function(input, output, session, map_dat) {
+leafletMapServer <- function(input, output, session, map_dat, add_dat) {
   
   output$resource_map <- renderLeaflet({
       leaflet() %>%
@@ -17,9 +17,17 @@ leafletMapServer <- function(input, output, session, map_dat) {
   })
   
   observe({
-    leafletProxy("resource_map", data = map_dat) %>%
+    leafletProxy("resource_map", data = map_dat()) %>%
       clearMarkers() %>%
       addMarkers(lng = ~Lon, lat = ~Lat, popup = ~Organization)
+  })
+  
+  observe({
+    pol_dat <- add_dat()
+    
+    leafletProxy("resource_map", data = pol_dat) %>%
+      clearShapes() %>%
+      addPolygons(fillColor = "red", stroke = F, opacity = 0.7)
   })
 
   }
