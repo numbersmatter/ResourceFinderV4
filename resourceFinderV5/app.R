@@ -7,6 +7,7 @@ library(shinycssloaders)
 source("global.R")
 source("inputModule.R")
 source("leaflet_module.R")
+source("addressModule.R")
 
 # Define UI for shiny app
 ui <- dashboardPage(
@@ -17,7 +18,8 @@ ui <- dashboardPage(
       menuItem("Help Video", tabName = "helpVideo", icon = icon("play-circle")),
       menuItem("Resources", tabName = "resources", icon = icon("th-list")),
       filterDataInputsUI("selections",
-                         categories = unique(resources$Category))
+                         categories = unique(resources$Category)),
+      addressInputUI("address_input")
     )
   ),
   
@@ -31,7 +33,7 @@ ui <- dashboardPage(
                     HTML('<iframe width="560" height="315" src="https://www.youtube.com/embed/ScMzIvxBSi4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
                 ),
                 column(width = 3)
-              ) # closing fluidRow
+              ), # closing fluidRow
       ), # Closing helpVideo tabItem
       tabItem(tabName = "resources",
               fluidRow(
@@ -66,13 +68,14 @@ server <- (function(input, output, session) {
       filter(if (is.null(selections$programs())) !(Program %in% selections$programs()) else Program %in% selections$programs())
   })
   
-  # Create an observer for change in data and call module for main Leaflet map
-  observe({
-    map_dat <- final_df()
-    
-    callModule(leafletMapServer, "main_map", map_dat = map_dat)
-  })
+  # Call address entry module and store in a object to reuse
+  res <- callModule(addressInputServer, "address_input")
+
+  # Call leaflet module and pass both reactive data objects to module
+  callModule(leafletMapServer, "main_map", map_dat = final_df, add_dat = res)
  
+  # Non-module UI components below 
+  ## Total Programs value box
   output$programTotal <- renderValueBox({
     valueBox(
       paste0(nrow(resources)), "Total Programs", icon = icon("list"),
@@ -81,6 +84,7 @@ server <- (function(input, output, session) {
     
   })
   
+  ## Reactive calculated value box for filtered dataset
   output$programValue <- renderValueBox({
     valueBox(
       paste0(nrow(final_df())), "# of filtered Programs", icon = icon("list"),
@@ -88,10 +92,11 @@ server <- (function(input, output, session) {
     )
   })
 
-  #programdata
+  ## Reactively generated UI for program information below map
   output$programinfo <- renderUI({
     lapply(1:nrow(final_df()), function(i){
       fluidRow(
+        column(width = 12,
         box(
           width = 12,
           title = paste0("A Program of: ", final_df()[i, 'Organization']),
@@ -114,6 +119,7 @@ server <- (function(input, output, session) {
             "Sunday: ", final_df()[i,'Sun'],br(),
           )
         )
+      )
       )
     })
     
