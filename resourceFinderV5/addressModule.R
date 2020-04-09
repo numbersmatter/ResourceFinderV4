@@ -21,17 +21,31 @@ addressInputServer <- function(input, output, session) {
     paste0("https://nominatim.openstreetmap.org/search?q=", str_replace_all(input$address, " ", "+"), "&format=json")
   })
   
+  search_url <- reactive ({ url() })
+  
   res <- reactive({
-    search_url <- url()
-    
-    GET(url = search_url) %>%
+    api_call <- GET(url = search_url()) %>%
       .$content %>%
       rawToChar() %>%
-      from_json() %>%
-      st_as_sf(coords = c("lon", "lat"), crs = 4326) %>%
-      st_transform(crs = 3488) %>%
-      st_buffer(2000) %>%
-      st_transform(crs = 4326)
+      from_json()
+    
+    if (is.list(api_call)) {
+      api_call %>%
+        map_df(.x = ., .f = as_tibble) %>%
+        distinct(place_id,.keep_all = T) %>%
+        st_as_sf(coords = c("lon", "lat"), crs = 4326) %>%
+        st_transform(crs = 3488) %>%
+        st_buffer(2000) %>%
+        st_transform(crs = 4326)
+    } else {
+      api_call %>%
+        st_as_sf(coords = c("lon", "lat"), crs = 4326) %>%
+        st_transform(crs = 3488) %>%
+        st_buffer(2000) %>%
+        st_transform(crs = 4326)
+    }
+    
+    
   })
   
   return(reactive({ res() }))
