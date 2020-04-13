@@ -1,0 +1,137 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+## Purpose
+Filter resources to those within a set distance of a given address.
+
+
+```{r libraries}
+library(tidyverse)
+library(sf)
+library(httr)
+library(jsonify)
+library(geosphere)
+```
+
+
+
+## import data
+
+```{r}
+# Copied script directly from Data.World documentation ----
+GET("https://query.data.world/s/q3tyzwg4ik44vvnsakvuzoxdfqdg6y", write_disk(tf <- tempfile(fileext = ".xlsx")))
+
+resources <- read_excel(tf)
+
+# Changing variable names ----
+names(resources) <-str_to_title(names(resources))
+
+# Converting Lon & Lat to numeric
+resources <- resources %>%
+  mutate(Lon = as.numeric(Lon), Lat = as.numeric(Lat)) %>%
+  filter(!(is.na(Lat)) & !(is.na(Lon)))
+```
+
+
+# Get address Lat Lon
+
+breaking this into pieces to understand it
+
+
+
+take address input and create a url
+```{r}
+
+address <- "301 West Market St, Greensboro, NC"
+
+url <- paste0("https://nominatim.openstreetmap.org/search?q=", str_replace_all(address, " ", "+"), "&format=json")
+  
+  
+  search_url <- url
+  
+
+```
+
+
+Do api call and return dataframe of information on the address.
+```{r}
+    api_call <- GET(url = search_url) %>%
+      .$content %>%
+      rawToChar() %>%
+      from_json()
+    
+    
+```
+
+
+
+Not sure what this does
+```{r}
+test_element<- if (class(api_call) == "list") {
+      api_call %>%
+        map_df(.x = ., .f = as_tibble) %>%
+        distinct(place_id,.keep_all = T) %>%
+        st_as_sf(coords = c("lon", "lat"), crs = 4326) %>%
+        st_transform(crs = 3488) %>%
+        st_buffer(2000) %>%
+        st_transform(crs = 4326)
+    } else {
+      api_call %>%
+        st_as_sf(coords = c("lon", "lat"), crs = 4326) %>%
+        st_transform(crs = 3488) %>%
+        st_buffer(2000) %>%
+        st_transform(crs = 4326)
+    }
+```
+
+
+test for simple case
+
+```{r}
+
+
+
+distm(c(resources$Lon[[1]], resources$Lat[[1]]), c(as.numeric(api_call$lon[[1]]),as.numeric( api_call$lat[[1]])), fun = distHaversine)
+
+
+
+
+
+```
+
+
+
+
+Mutate the function across the dataframe
+
+```{r}
+
+address_lat <- as.numeric(api_call$lat[1])
+address_lon <- as.numeric(api_call$lon[1] )
+
+
+# add lon lat from address input into data frame
+resources2 <- mutate(resources,
+                     add_lon = address_lon,
+                     add_lat = address_lat
+)
+
+
+# use distHaversine to get great circle distance in meters
+#divide by 1609 to convert meters into miles
+resources2$distance_miles <- (distHaversine(resources2[,23:24],resources2[,26:27] ))/1609
+
+```
+
+
+
+
+
+
+
+
+
+
+
