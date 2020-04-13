@@ -42,15 +42,28 @@ dashboardPage(
         tabItems(
             tabItem(tabName = "helpVideo",
                     fluidRow(
+                        box(
+                            width = 8, status = "info", solidHeader = TRUE,
+                            title = "Click on 'Resources' Tab to the left to jump to resources"
+                      
+                        ),
+                    ),# end fluidRow
+                    fluidRow(
                         column(width = 3),
                         box(width = NULL,
-                            title = "YT Video Here",
+                            title = "Quick Start Video ",
                             HTML('<iframe width="560" height="315" src="https://www.youtube.com/embed/ScMzIvxBSi4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
                         ),
                         column(width = 3)
                     ) # closing fluidRow
             ), # Closing helpVideo tabItem
             tabItem(tabName = "resources",
+                    # fluidRow(
+                    #     column(width = 3),
+                    #     box(width = NULL,
+                    #         title = "YT Video Here",
+                    #         HTML('<iframe width="560" height="315" src="https://www.youtube.com/embed/ScMzIvxBSi4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
+                    #     ),
                     fluidRow(
                         valueBoxOutput("programTotal"),
                         valueBoxOutput("programValue")
