@@ -121,9 +121,9 @@ server <- (function(input, output, session) {
         )
       )
       )
-    })
+    }) # end lapply
     
-  })
+  }) #End renderUi
   
 })
 
