@@ -4,6 +4,36 @@ library(shiny)
 # Define server logic
 shinyServer(function(input, output, session) {
     
+    ### begin address code
+    my_address <- reactive({
+        if(!is.null(input$jsValueAddressNumber)){
+            if(length(grep(pattern = input$jsValueAddressNumber, x = input$jsValuePretty ))==0){
+                final_address<- c(input$jsValueAddressNumber, input$jsValuePretty)
+            } else{
+                final_address<- input$jsValuePretty
+            }
+            final_address
+        }
+    })
+    
+    
+    output$full_address <- renderText({
+        if(!is.null(my_address())){
+            my_address()
+        }
+    })
+    
+    output$lon_lat <- renderText({
+        if(!is.null(my_address())){
+            not_a_df2 <- google_geocode(address = my_address())
+            my_coords2 <- geocode_coordinates(not_a_df2)
+            my_coords3 <- c(my_coords2$lat[1], my_coords2$lng[1])
+        }
+    })
+    
+    
+    ### end Address line
+    
     observe({
         cities <- if( is.null(input$category)) character(0) else{
             filter(resources, Category %in% input$category)%>%
@@ -55,6 +85,8 @@ shinyServer(function(input, output, session) {
         )
     })
     
+    # End Valueboxes
+    
     output$table <- DT::renderDataTable({
         address_lat <- as.numeric(api_call$lat[1]())
         address_lon <- as.numeric(res$lon[1]() )
@@ -88,7 +120,57 @@ shinyServer(function(input, output, session) {
     
     #leaflet map
     output$map <- renderLeaflet({
-        df <- appdata()
+        if( !is.null(my_address())){
+            
+            addressholder <- google_geocode(address = my_address())
+            
+            addresslat <- addressholder$results$geometry$location$lat
+            
+            addresslon <- addressholder$results$geometry$location$lng
+            
+            
+            df <- appdata()
+            
+            df<- add_row(df,
+                         Lat= addresslat,
+                         Lon =  addresslon,
+                         Program = "test4"
+            )
+            
+            df <- mutate(df,
+                                 add_lon = addresslon,
+                                 add_lat = addresslat,
+                         
+            )
+            
+            df <- mutate(df,
+                         distance_miles = (distHaversine(df[,c("Lon", "Lat")],df[,c("add_lon", "add_lat")] ))/1609)
+            
+            df <- filter(df, distance_miles <2 )
+            
+            
+            
+          
+         
+
+        } else {
+            
+            # addressholder <- google_geocode(address = my_address())
+            # 
+            # addresslat <- addressholder$results$geometry$location$lat
+            # 
+            # addresslon <- addressholder$results$geometry$location$lng
+
+            df <- appdata()
+            
+            df <- mutate(df,
+                         home = FALSE)
+            
+
+        }
+        
+        
+        
         
         
         
@@ -99,7 +181,6 @@ shinyServer(function(input, output, session) {
                                      "Hours Open:","<br>","Check Program box below."
                        ) 
             )
-        
     })
     
     
@@ -136,8 +217,8 @@ shinyServer(function(input, output, session) {
     })
     
     
-    
+  
     
     
 })
-
+browser() 

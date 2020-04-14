@@ -23,13 +23,13 @@ library(geosphere)
 # Copied script directly from Data.World documentation ----
 GET("https://query.data.world/s/q3tyzwg4ik44vvnsakvuzoxdfqdg6y", write_disk(tf <- tempfile(fileext = ".xlsx")))
 
-resources <- read_excel(tf)
+resources4 <- read_excel(tf)
 
 # Changing variable names ----
-names(resources) <-str_to_title(names(resources))
+names(resources4) <-str_to_title(names(resources4))
 
 # Converting Lon & Lat to numeric
-resources <- resources %>%
+resources4 <- resources %>%
   mutate(Lon = as.numeric(Lon), Lat = as.numeric(Lat)) %>%
   filter(!(is.na(Lat)) & !(is.na(Lon)))
 ```
@@ -113,15 +113,17 @@ address_lon <- as.numeric(api_call$lon[1] )
 
 
 # add lon lat from address input into data frame
-resources2 <- mutate(resources,
+resources5 <- mutate(resources,
                      add_lon = address_lon,
-                     add_lat = address_lat
+                     add_lat = address_lat,
+                     distance = (distHaversine(resources5[,c("Lon", "Lat")],resources5[,c("add_lon", "add_lat")] ))/1609
 )
 
+resources6 <- resources5
 
 # use distHaversine to get great circle distance in meters
 #divide by 1609 to convert meters into miles
-resources2$distance_miles <- (distHaversine(resources2[,23:24],resources2[,26:27] ))/1609
+resources6$distance_miles <- (distHaversine(resources5[,c("Lon", "Lat")],resources5[,c("add_lon", "add_lat")] ))/1609
 
 ```
 

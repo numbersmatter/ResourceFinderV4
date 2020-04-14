@@ -2,7 +2,12 @@
 library(httr)
 library(readxl)
 library(tidyverse)
+library(leaflet)
 
+
+api_key<-"PLACE API KEY HERE"
+
+set_key(key = api_key)
 
 
 # Copied script directly from Data.World documentation ----
