@@ -13,8 +13,9 @@ dashboardPage(
     
     dashboardSidebar(
         sidebarMenu(
-            menuItem("Help Video", tabName = "helpVideo", icon = icon("play-circle")),
             menuItem("Resources", tabName = "resources", icon = icon("th-list")),
+            menuItem("Help Video", tabName = "helpVideo", icon = icon("play-circle")),
+            
             selectInput(inputId = "category",
                         label = "Start by selecting a category:",
                         choices = unique(resources$Category),
@@ -33,7 +34,19 @@ dashboardPage(
                         multiple = TRUE,
                         selectize = TRUE) #,
             ,textInput(inputId = "my_address", label = "Type An Address")    
-            ,textOutput(outputId = "full_address")
+            ,textOutput(outputId = "full_address"),
+            
+            
+            #feedback form
+            br(),
+            
+            p(a(href="https://forms.gle/fBLCKun21bnEVw1i9", "Please give us feedback")),
+            
+            br(),
+            
+            
+            p(a(href="https://forms.gle/gMVf1cbsrQs9wpdK8", "Suggest an Organization to Add"))
+            
             #addressInputUI("address_input")
         ) #end sidebar menu
         
@@ -77,23 +90,7 @@ var autocomplete =   new google.maps.places.Autocomplete(document.getElementById
                  </script> 
                  <script src='https://maps.googleapis.com/maps/api/js?key=", api_key,"&libraries=places&callback=initAutocomplete' async defer></script>")),
         tabItems(
-            tabItem(tabName = "helpVideo",
-                    fluidRow(
-                        box(
-                            width = 8, status = "info", solidHeader = TRUE,
-                            title = "Click on 'Resources' Tab to the left to jump to resources"
-                      
-                        ),
-                    ),# end fluidRow
-                    fluidRow(
-                        column(width = 3),
-                        box(width = NULL,
-                            title = "Quick Start Video ",
-                            HTML('<iframe width="560" height="315" src="https://www.youtube.com/embed/ScMzIvxBSi4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
-                        ),
-                        column(width = 3)
-                    ) # closing fluidRow
-            ), # Closing helpVideo tabItem
+            
             tabItem(tabName = "resources",
                     # fluidRow(
                     #     column(width = 3),
@@ -111,7 +108,24 @@ var autocomplete =   new google.maps.places.Autocomplete(document.getElementById
                             leafletOutput("map")),
                         uiOutput("programinfo")
                     ) # closing fluidRow
-            ) # Closing resources tabItem
+            ), # Closing resources tabItem
+            tabItem(tabName = "helpVideo",
+                    fluidRow(
+                        box(
+                            width = 8, status = "info", solidHeader = TRUE,
+                            title = "Click on 'Resources' Tab to the left to jump to resources"
+                            
+                        ),
+                    ),# end fluidRow
+                    fluidRow(
+                        column(width = 3),
+                        box(width = NULL,
+                            title = "Quick Start Video ",
+                            HTML('<iframe width="560" height="315" src="https://www.youtube.com/embed/ScMzIvxBSi4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')
+                        ),
+                        column(width = 3)
+                    ) # closing fluidRow
+            ) # Closing helpVideo tabItem
         ) # Closing tabItems
     ) # Closing dashboardBody
 ) # Closing dashboardPage

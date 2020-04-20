@@ -193,7 +193,7 @@ shinyServer(function(input, output, session) {
                     width = 12,
                     title = paste0("A Program of: ", appdata()[i, 'Organization']),
                     h2(appdata()[i, 'Program']),
-                    p("Address: ", str_to_title(appdata()[i,'Geoaddress']),
+                    p("Address: ", appdata()[i,'Geoaddress'],
                       br(), 
                       "Phone: ", appdata()[i,'Phone'], br(),
                       "website: ", a(href= paste0(appdata()[i,'Website']), paste0(appdata()[i,'Website']) , target="_blank" )),
@@ -221,4 +221,4 @@ shinyServer(function(input, output, session) {
     
     
 })
-browser() 
+
